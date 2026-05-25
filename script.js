@@ -13,7 +13,7 @@ const winCoinsEl = document.getElementById("winCoins");
 const loginLink = document.getElementById("loginLink");
 
 // Cambia esta URL cuando tengas la página real de loggeo.
-const paginaDeLoggeo = "https://ejemplo.com/login";
+const paginaDeLoggeo = "https://wa.me/573142347047?text=Hola,%20soy%20ganador%20de%20la%20Misi%C3%B3n%20KSL-01.%20Quiero%20reclamar%20mi%20premio%20de%20KSL%20Arte%20y%20Dise%C3%B1o%20Gr%C3%A1fico%20S.A.S.";
 loginLink.href = paginaDeLoggeo;
 
 const logo = new Image();
