@@ -67,3 +67,67 @@ AJUSTE v9 - Vida extra y meta 80
 - La meta de monedas se ajustó a 80.
 - Se retiró el obstáculo superior del tramo final para suavizar el cierre de la misión.
 - No se modificó el resto del recorrido.
+
+
+============================================================
+VERSIÓN 10 — EDICIÓN GALÁCTICA (mejora integral)
+============================================================
+
+## Recorrido y duración
+- Recorrido ampliado de 14.000 px a 24.000 px (10 sectores).
+- Nuevos sectores: Base KSL, Nebulosa Azul, Campo de Asteroides,
+  Anillos Verdes, Estación Fantasma, Zona Roja, Corredor Magnético,
+  Ruta Dorada, Tormenta Iónica y Portal Premio.
+- Meta ajustada a 120 monedas (hay ~354 disponibles en el mapa).
+- 7 checkpoints (antes 4), cada uno entrega +5 monedas y guarda avance.
+- La meta y las vidas son configurables en el objeto CONFIG al
+  inicio de script.js.
+
+## Contenido nuevo de juego
+- Plataformas móviles (moradas) que patrullan y transportan la nave.
+- Anillos de impulso: al cruzarlos dan un empujón hacia adelante.
+- Gemas KSL (+5 monedas) en rutas altas de riesgo/recompensa.
+- Power-up Imán (M): atrae monedas cercanas durante ~9 segundos.
+- Minas espaciales estáticas que pulsan como advertencia.
+- Lluvias de meteoritos en Zona Roja y Tormenta Iónica (con cola
+  de fuego y frecuencia moderada para mantener el juego justo).
+- El turbo y los anillos elevan temporalmente la velocidad máxima.
+
+## Mejoras gráficas
+- Parallax real de 3 capas: planetas lejanos, nebulosas y mundo.
+- Estrellas con titileo y profundidad + estrellas fugaces.
+- Planetas con cráteres y doble anillo; nebulosas que respiran.
+- Monedas con giro 3D y destellos; cajas KSL que flotan.
+- Nave con inclinación según el vuelo, estela luminosa y llama
+  extendida en turbo; aura de imán y burbuja de escudo mejorada.
+- Enemigos animados: ojo que escanea, propulsores, anillo orbital
+  en centinelas; asteroides irregulares que rotan.
+- Portal con partículas orbitando.
+- Banner animado al entrar a cada sector.
+- Tinte ambiental sutil por sector.
+- Viñeta roja al recibir daño y pulso de alerta con 1 vida.
+- Barra de progreso con marcas de checkpoints y marcador de nave.
+- Culling de dibujo (solo se pinta lo visible) para buen rendimiento.
+
+## Sonido
+- Efectos sintetizados con WebAudio (sin archivos externos):
+  monedas, gemas, cajas, checkpoints, daño, escudo, victoria, etc.
+- Botón de sonido en el HUD y tecla M para silenciar.
+- La preferencia de sonido se guarda en el dispositivo.
+
+## Interfaz
+- Tipografías espaciales (Orbitron + Exo 2) con respaldo a Arial.
+- Fondo de página con estrellas y aurora animadas (CSS).
+- Pantalla de inicio con estadísticas de la misión y tu récord.
+- Pantalla de derrota muestra sector alcanzado y % de progreso.
+- Pantalla de victoria muestra el tiempo de misión.
+- Botón "Reclamar premio" con pulso destacado.
+- Soporte de "prefers-reduced-motion" para accesibilidad.
+
+## Sin cambios (lógica de negocio intacta)
+- El premio solo se desbloquea llegando al portal con la meta
+  de monedas; si faltan, aviso y retroceso suave (igual que antes).
+- Enlaces de WhatsApp para reclamar premio y de Productos KSL.
+- Controles: ← → o A/D, espacio/↑/W, P para pausa, táctil en móvil.
+- Récord local de monedas en el dispositivo.
+- Física de vuelo original (misma gravedad y empuje).
