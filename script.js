@@ -900,13 +900,17 @@ function draw() {
 }
 
 /* ------------------ Fondo profundo y estrellas ---------------- */
+let _bgGrad = null;
 function drawSpace() {
-  const bg = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  bg.addColorStop(0, "#00020a");
-  bg.addColorStop(0.42, "#06112b");
-  bg.addColorStop(0.75, "#070b18");
-  bg.addColorStop(1, "#020617");
-  ctx.fillStyle = bg;
+  // El gradiente de fondo es estático: se crea una sola vez y se reutiliza.
+  if (!_bgGrad) {
+    _bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    _bgGrad.addColorStop(0, "#00020a");
+    _bgGrad.addColorStop(0.42, "#06112b");
+    _bgGrad.addColorStop(0.75, "#070b18");
+    _bgGrad.addColorStop(1, "#020617");
+  }
+  ctx.fillStyle = _bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Estrellas con parallax por profundidad y titileo.
@@ -949,6 +953,10 @@ function drawNebulas() {
   ];
   const pulse = Math.sin(missionTime / 90) * 0.06 + 1;
   for (const n of nebulas) {
+    // Culling: la capa está trasladada -cameraX*0.55, así que la posición
+    // en pantalla es n.x - cameraX*0.55. Si no es visible, no la dibujamos.
+    const sx = n.x - cameraX * 0.55;
+    if (sx + n.r < -40 || sx - n.r > canvas.width + 40) continue;
     const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * pulse);
     g.addColorStop(0, n.c);
     g.addColorStop(1, "rgba(0,0,0,0)");
@@ -970,6 +978,10 @@ function drawPlanets() {
 }
 
 function drawPlanet(x, y, r, color, ring, craters) {
+  // Culling: la capa está trasladada -cameraX*0.3. Descartamos si no se ve.
+  const sx = x - cameraX * 0.3;
+  const halo = r * 1.6;
+  if (sx + halo < -40 || sx - halo > canvas.width + 40) return;
   const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.45, 5, x, y, r);
   g.addColorStop(0, "rgba(255,255,255,.55)");
   g.addColorStop(0.18, color);
@@ -1070,7 +1082,7 @@ function drawBoostRings() {
     const pulse = Math.sin(missionTime / 10 + ring.x) * 4;
     ctx.save();
     ctx.shadowColor = active ? "#7dd3fc" : "#334155";
-    ctx.shadowBlur = active ? 22 : 4;
+    ctx.shadowBlur = active ? 10 : 3;
     ctx.strokeStyle = active ? "rgba(125,211,252,.95)" : "rgba(100,116,139,.5)";
     ctx.lineWidth = 8;
     ctx.beginPath();
@@ -1171,7 +1183,7 @@ function drawCheckpoints() {
     ctx.save();
 
     ctx.shadowColor = cp.active ? "#22c55e" : "#F2C10A";
-    ctx.shadowBlur = cp.active ? 18 : 10 + pulse * 8;
+    ctx.shadowBlur = cp.active ? 9 : 6 + pulse * 4;
 
     const baseGrad = ctx.createLinearGradient(cp.x, cp.y, cp.x, cp.y + cp.h);
     baseGrad.addColorStop(0, cp.active ? "#86efac" : "#fde68a");
@@ -1226,7 +1238,7 @@ function drawBoxes() {
     const hover = b.hit ? 0 : Math.sin(missionTime / 22 + b.x) * 3;
     ctx.translate(0, hover);
     ctx.shadowColor = primary;
-    ctx.shadowBlur = b.hit ? 0 : 18;
+    ctx.shadowBlur = b.hit ? 0 : 9;
     const g = ctx.createLinearGradient(b.x, b.y, b.x + b.w, b.y + b.h);
     g.addColorStop(0, "#f8fafc");
     g.addColorStop(0.18, primary);
@@ -1266,7 +1278,7 @@ function drawPowerUps() {
     const fill = pu.type === "shield" ? "rgba(96,165,250,.9)" : pu.type === "life" ? "rgba(134,239,172,.92)" : pu.type === "magnet" ? "rgba(192,132,252,.9)" : "rgba(242,193,10,.92)";
     ctx.save();
     ctx.shadowColor = glowColor;
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 10;
     ctx.fillStyle = fill;
     ctx.beginPath();
     ctx.arc(pu.x, pu.y, pu.r + pulse, 0, Math.PI * 2);
@@ -1299,7 +1311,7 @@ function drawGems() {
     const y = g.y + hover;
     ctx.save();
     ctx.shadowColor = "#5eead4";
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur = 10;
     const grad = ctx.createLinearGradient(g.x - 16, y - 20, g.x + 16, y + 20);
     grad.addColorStop(0, "#ccfbf1");
     grad.addColorStop(0.5, "#2dd4bf");
@@ -1379,7 +1391,7 @@ function drawEnemies() {
       const cy = e.y + e.h / 2 + Math.sin(missionTime / 26 + e.x) * 4;
       const pulse = (Math.sin(missionTime / 9 + e.x) + 1) / 2;
       ctx.shadowColor = "#E01818";
-      ctx.shadowBlur = 12 + pulse * 14;
+      ctx.shadowBlur = 7 + pulse * 6;
       const g = ctx.createRadialGradient(cx - 6, cy - 6, 2, cx, cy, 22);
       g.addColorStop(0, "#94a3b8");
       g.addColorStop(0.5, "#334155");
@@ -1410,7 +1422,7 @@ function drawEnemies() {
 
     const isSentry = e.type === "sentry";
     ctx.shadowColor = isSentry ? "#F2C10A" : "#E01818";
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 7;
     const bodyGrad = ctx.createLinearGradient(e.x, e.y, e.x, e.y + e.h);
     bodyGrad.addColorStop(0, isSentry ? "#b91c1c" : "#ff3b3b");
     bodyGrad.addColorStop(1, isSentry ? "#450a0a" : "#7f1d1d");

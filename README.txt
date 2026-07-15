@@ -131,3 +131,22 @@ VERSIÓN 10 — EDICIÓN GALÁCTICA (mejora integral)
 - Controles: ← → o A/D, espacio/↑/W, P para pausa, táctil en móvil.
 - Récord local de monedas en el dispositivo.
 - Física de vuelo original (misma gravedad y empuje).
+
+
+------------------------------------------------------------
+v10.1 — Optimización de rendimiento (fluidez)
+------------------------------------------------------------
+- Se eliminó el "filter: blur(30px)" animado de la capa de aurora
+  del fondo. Un desenfoque grande a pantalla completa animándose
+  en bucle obligaba al navegador a re-rasterizar toda esa capa en
+  cada frame y hundía los FPS de TODA la página (no solo del juego).
+  Ahora la aurora usa gradientes muy suaves y solo anima opacidad,
+  que el navegador compone en GPU sin repintar.
+- Las capas de estrellas del fondo usan will-change: transform para
+  animarse en GPU.
+- En el canvas: el gradiente de fondo ahora se crea una sola vez
+  (antes se recreaba 60 veces por segundo); se añadió culling a
+  planetas y nebulosas (no se dibujan ni se calculan sus gradientes
+  si están fuera de pantalla); y se redujeron los radios de "glow"
+  (shadowBlur) de cajas, gemas, power-ups, checkpoints, minas y
+  enemigos, que son costosos en la GPU. El aspecto se mantiene.
